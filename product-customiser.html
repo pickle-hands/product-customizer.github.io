@@ -233,7 +233,6 @@ const canvas   = document.getElementById('canvas');
 const ctx      = canvas.getContext('2d');
 const wrap     = document.getElementById('canvasWrap');
 
-let productImg = null;   // base product image
 let userImg    = null;   // customer's uploaded image
 let imgX, imgY, imgSize; // position & size of user image
 let dragging   = false;
@@ -250,68 +249,17 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 
 // ─── PRODUCT BASE IMAGE ──────────────────────
-// This is a simple placeholder product (a white mug drawn with canvas).
-// Replace this function with: productImg = new Image(); productImg.src = 'your-product.png';
-function drawPlaceholderProduct() {
-  const w = canvas.width, h = canvas.height;
-  ctx.clearRect(0,0,w,h);
-
-  // Shadow
-  ctx.shadowColor = 'rgba(0,0,0,0.08)';
-  ctx.shadowBlur  = 18;
-  ctx.shadowOffsetY = 6;
-
-  // Mug body
-  ctx.fillStyle = '#fff';
-  ctx.beginPath();
-  const mx = w*0.28, my = h*0.22, mw = w*0.44, mh = h*0.58;
-  ctx.roundRect(mx, my, mw, mh, 12);
-  ctx.fill();
-
-  // Mug handle
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = w*0.055;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.arc(mx+mw+8, my+mh*0.35, mh*0.22, -0.55, 0.55);
-  ctx.stroke();
-
-  ctx.shadowColor = 'transparent';
-  ctx.shadowBlur  = 0;
-  ctx.shadowOffsetY = 0;
-
-  // Mug rim
-  ctx.fillStyle = '#e8e3dc';
-  ctx.beginPath();
-  ctx.ellipse(mx+mw/2, my, mw/2, 10, 0, 0, Math.PI*2);
-  ctx.fill();
-  ctx.fillStyle = '#fff';
-  ctx.beginPath();
-  ctx.ellipse(mx+mw/2, my, mw/2-3, 7, 0, 0, Math.PI*2);
-  ctx.fill();
-
-  // Label area (subtle indicator)
-  ctx.fillStyle = 'rgba(42,42,42,0.04)';
-  ctx.beginPath();
-  ctx.roundRect(mx+mw*0.12, my+mh*0.18, mw*0.76, mh*0.52, 6);
-  ctx.fill();
-
-  ctx.fillStyle = 'rgba(42,42,42,0.12)';
-  ctx.font = '11px DM Sans, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('Your image here', mx+mw/2, my+mh*0.48);
-}
+// ⬇️  CHANGE THIS LINE to point to your product image file:
+const productImg = new Image();
+productImg.src = 'IMG_4049.jpg'; // <── swap this path
+productImg.onload = function() { render(); };
 
 // ─── RENDER LOOP ─────────────────────────────
 function render() {
   const w = canvas.width, h = canvas.height;
 
-  if (productImg) {
-    ctx.clearRect(0,0,w,h);
-    ctx.drawImage(productImg, 0, 0, w, h);
-  } else {
-    drawPlaceholderProduct();
-  }
+  ctx.clearRect(0,0,w,h);
+  ctx.drawImage(productImg, 0, 0, w, h);
 
   // Draw user image if uploaded
   if (userImg) {
